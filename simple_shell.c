@@ -1,26 +1,22 @@
 #include "main.h"
 
-/*
- * Main: - Entry point of the simple shell program
+/**
+ * simple_shell - function performs like a command line interpreter.
+ * Description: it reads command from stdin and executes it, freees up the
  *
- * Description: This program implements a simple shell that reads
- *              commands from the user, executes them using execve,
- *              and waits for the command to complete.
- *
- * Return: 0 on successful execution, or exit(EXIT_FAILURE) on failure.
+ * Return: 0 on success
  */
 
-int main(void)
+void simple_shell(void)
 {
 	char *line = NULL;
-	size_t buffer_size = 0;
 	ssize_t read_bytes;
-	char *args[2];
+	int status;
 
 	while (1)
 	{
 		printf("$ ");
-		read_bytes = getline(&line, &buffer_size, stdin);
+		read_bytes = read_command(&line);
 		if (read_bytes == -1)
 		{
 			perror("getline");
@@ -37,23 +33,16 @@ int main(void)
 			{
 				line[read_bytes - 1] = '\0';
 			}
-			args[0] = line;
-			args[1] = NULL;
 			if (fork() == 0)
 			{
-				if (execve(line, args, environ) == -1)
+				execute_command(line);
+			}
+				else
 				{
-					perror(line);
-					exit(EXIT_FAILURE);
+					wait(&status);
 				}
 			}
-			else
-			{
-				wait(NULL);
-			}
 		}
-	}
-	free(line);
-	return (0);
+		free(line);
 }
 

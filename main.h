@@ -8,6 +8,9 @@
 
 #define BUFFER_SIZE 1024
 
+void execute_command(char *command);
+void simple_shell(void);
+ssize_t read_command(char **line);
 extern char **environ;
 
 #endif

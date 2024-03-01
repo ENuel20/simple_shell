@@ -1,6 +1,7 @@
 #include <stdio.h>
+
 /**
- * betty: A function that passes the betty check
+ * betty - A function that passes the betty check
  *
  * Return: (0) if succesful
  */
